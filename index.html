@@ -29,26 +29,36 @@
       chat.scrollTop = chat.scrollHeight;
     }
 
-    async function sendMessage() {
-      const msgInput = document.getElementById("message");
-      const message = msgInput.value.trim();
-      if (!message) return;
+  async function sendMessage() {
+  const chat = document.getElementById("chat");
+  const msgInput = document.getElementById("message");
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
 
-      addMessage(message, "user");
-      msgInput.value = "";
+  const message = msgInput.value.trim();
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
 
-      try {
-        const res = await fetch("https://the50project.app.n8n.cloud/webhook-test/asarci_chatbot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
-        });
-        const data = await res.json();
-        addMessage(data.reply || "No response from bot.", "bot");
-      } catch (err) {
-        addMessage("Error connecting to bot.", "bot");
-      }
-    }
+  if (!message || !name || !email) {
+    alert("Please enter your name, email, and a message.");
+    return;
+  }
+
+  addMessage(message, "user");
+  msgInput.value = "";
+
+  try {
+    const res = await fetch("YOUR_N8N_WEBHOOK_URL", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, name, email })
+    });
+    const data = await res.json();
+    addMessage(data.reply || "No response from bot.", "bot");
+  } catch (err) {
+    addMessage("Error connecting to bot.", "bot");
+  }
+}
   </script>
 </body>
 </html>
